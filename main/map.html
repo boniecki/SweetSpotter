@@ -1,0 +1,144 @@
+ <html>
+   <head>
+     <meta charset="utf-8">
+     <style>
+       html, body, #map_canvas {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+       }
+     </style>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=weather&sensor=false"></script>
+<script type="text/javascript">
+
+var map=null;
+var weatherLayer = new google.maps.weather.WeatherLayer({
+  temperatureUnits: google.maps.weather.TemperatureUnit.FAHRENHEIT
+});
+var trafficLayer = new google.maps.TrafficLayer();
+var cloudLayer = new google.maps.weather.CloudLayer();
+
+var football = new google.maps.KmlLayer({
+    url: 'http://www.nada.kth.se/~boniecki/football.kml'
+  });
+  
+var volleyball = new google.maps.KmlLayer({
+    url: 'http://www.nada.kth.se/~boniecki/volleyball.kml'
+  });
+
+var watertemp = new google.maps.KmlLayer({
+    url: 'http://www.nada.kth.se/~boniecki/watertemp.kml'
+  });
+
+
+var   fusionLayer = new google.maps.FusionTablesLayer({
+      map: map,
+      heatmap: { enabled: false },
+      query: {
+        select: "col2",
+        from: "1_uTANOGNan0jLsE1_Lc0DZObbblzpwS4JYJP8PD5",
+        where: ""
+      },
+      options: {
+        styleId: 2,
+        templateId: 2
+      }
+    });
+
+  var imageBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(-90.0, -180.0),
+      new google.maps.LatLng(90.0, 180));
+
+
+watermap = new google.maps.GroundOverlay(
+      '1580978rgb_T_3600x1800_-167772161.0.KMZ.png',
+      imageBounds);
+
+
+
+
+
+function initialize() {
+
+var mapOptions = {
+  zoom: 10,
+  center: new google.maps.LatLng(27.818,-15.75),
+  mapTypeId: google.maps.MapTypeId.ROADMAP,
+//  styles: styles,
+  scrollwheel: false
+};
+
+  map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions);
+
+  check();
+}
+
+        function check() 
+    {
+
+        if(document.getElementById('weather').checked)
+
+          {weatherLayer.setMap(map);}
+
+        else 
+
+          {weatherLayer.setMap(null);}
+
+        if(document.getElementById('clouds').checked)
+
+          {cloudLayer.setMap(map);}
+
+        else 
+
+          {cloudLayer.setMap(null);}
+
+                 
+                 
+        if(document.getElementById('fusion').checked)
+
+           {fusionLayer.setMap(map);}
+
+        else
+
+           {fusionLayer.setMap(null);}
+
+        if(document.getElementById('football').checked)
+
+           {football.setMap(map);}
+
+        else
+
+           {football.setMap(null);}
+       
+        if(document.getElementById('volleyball').checked)
+
+           {volleyball.setMap(map);}
+
+        else
+
+           {volleyball.setMap(null);}
+           
+        if(document.getElementById('watertemp').checked)
+
+           {watermap.setMap(map);}
+
+        else
+
+           {watermap.setMap(null);}
+    }
+
+google.maps.event.addDomListener(window, 'load', initialize);
+     </script>
+   </head>
+   <body>
+        <label><input type="checkbox" id="weather" checked="checked" onclick="check()" />Weather</label>
+        <label><input type="checkbox" id="clouds" onclick="check()" />Clouds</label>
+        <label><input type="checkbox" id="fusion" checked="checked" onclick="check()" />Beaches</label>
+        <label><input type="checkbox" id="football" onclick="check()" />Football</label>
+        <label><input type="checkbox" id="volleyball" onclick="check()" />Volleyball</label>
+        <label><input type="checkbox" id="watertemp" onclick="check()" />Watertemp</label>
+
+   <div id="map_canvas"></div>
+ 
+   </body>
+ </html>
